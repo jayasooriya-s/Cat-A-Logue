@@ -1,8 +1,11 @@
+import 'package:cat_a_logue/constaants.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cat_a_logue/widgets/catImageContainer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cat_a_logue/widgets/customTextformField.dart';
+import 'package:cat_a_logue/widgets/customButton.dart';
 
 class AddCatScreen extends StatefulWidget {
   @override
@@ -12,6 +15,11 @@ class AddCatScreen extends StatefulWidget {
 class _AddCatScreenState extends State<AddCatScreen> {
   File image;
   final picker = ImagePicker();
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController breedController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   Future getImage() async {
     final pickedFile = await picker.getImage(
@@ -30,20 +38,66 @@ class _AddCatScreenState extends State<AddCatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: EdgeInsets.all(15.0.r),
-      child: Container(
-        child: Column(
-          children: [
-            Row(
+        body: SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(15.0.r),
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CameraContainer(
-                  image: image,
-                  onTap: getImage,
+                Center(
+                  child: CameraContainer(
+                    image: image,
+                    onTap: getImage,
+                  ),
                 ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Text("  Cat's Name"),
+                CustomTextFormField(
+                  controller: nameController,
+                  hintTexts: "Cat's Name",
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Text(
+                  "  Cat's Breed",
+                ),
+                CustomTextFormField(
+                  hintTexts: "Cat's Breed",
+                  controller: breedController,
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Text("  Cat's Age"),
+                CustomTextFormField(
+                  hintTexts: "Cat's Age",
+                  controller: ageController,
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Text("  Cat's Description"),
+                CustomTextFormFieldMultiLine(
+                  hintTexts: 'Description',
+                  controller: descriptionController,
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                CustomButton(
+                  buttonColor: kPrimaryColor,
+                  buttonText: 'Add Cat',
+                  textColor: Colors.grey[200],
+                )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     ));
@@ -61,10 +115,7 @@ class CameraContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         child: image == null
-            ? CameraImageContainer(
-                catImage:
-                    'https://image.flaticon.com/icons/png/512/685/685672.png',
-              )
+            ? CameraImageContainer()
             : CatImageContainerFile(
                 catImage: image,
               ),

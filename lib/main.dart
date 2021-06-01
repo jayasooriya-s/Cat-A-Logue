@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
       builder: () => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'SLNT',
-        theme: ThemeData.light(),
+        theme: ThemeData.light().copyWith(
+            accentColor: kPrimaryColor, primaryColorLight: kPrimaryColor),
         builder: (context, widget) {
           return MediaQuery(
             //Setting font does not change with system font size
