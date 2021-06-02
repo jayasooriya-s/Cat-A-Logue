@@ -2,7 +2,7 @@
     package="com.example.cat_a_logue">
    <application
    android:requestLegacyExternalStorage="true"
-        android:label="cat_a_logue"
+        android:label="cat alogue"
         android:icon="@mipmap/ic_launcher">
         
         <activity

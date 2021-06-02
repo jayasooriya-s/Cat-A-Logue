@@ -19,7 +19,8 @@ class EditCatScreen extends StatefulWidget {
 }
 
 class _EditCatScreenState extends State<EditCatScreen> {
-  File image;
+  File imageFile;
+  File oldImagefile;
   final picker = ImagePicker();
 
   TextEditingController nameController = TextEditingController();
@@ -27,18 +28,6 @@ class _EditCatScreenState extends State<EditCatScreen> {
   TextEditingController breedController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  //List<CatProfile> catProfileList;
-
-  // addNewProfile() {
-  //   CatProfile newCatProfile = CatProfile(
-  //       age: ageController.text,
-  //       breed: breedController.text,
-  //       name: nameController.text,
-  //       description: descriptionController.text,
-  //       image: image);
-
-  //   widget.catProfileList.add(newCatProfile);
-  // }
   Future getImage() async {
     final pickedFile = await picker.getImage(
       source: ImageSource.camera,
@@ -46,7 +35,7 @@ class _EditCatScreenState extends State<EditCatScreen> {
 
     setState(() {
       if (pickedFile != null) {
-        image = File(pickedFile.path);
+        imageFile = File(pickedFile.path);
       } else {
         print('No image selected.');
       }
@@ -55,6 +44,9 @@ class _EditCatScreenState extends State<EditCatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    oldImagefile = Provider.of<CatProfileData>(context)
+        .catProfileList[widget.index]
+        .catImage;
     return Scaffold(
         body: SafeArea(
       child: Stack(
@@ -69,9 +61,7 @@ class _EditCatScreenState extends State<EditCatScreen> {
                   children: [
                     Center(
                       child: CameraContainer(
-                        image: Provider.of<CatProfileData>(context)
-                            .catProfileList[widget.index]
-                            .catImage,
+                        image: imageFile == null ? oldImagefile : imageFile,
                         onTap: getImage,
                       ),
                     ),
@@ -126,7 +116,7 @@ class _EditCatScreenState extends State<EditCatScreen> {
                     ),
                     CustomButton(
                       buttonColor: kPrimaryColor,
-                      buttonText: 'Add Cat',
+                      buttonText: 'Update',
                       textColor: Colors.grey[200],
                       onPress: () {
                         Provider.of<CatProfileData>(context, listen: false)
@@ -136,7 +126,9 @@ class _EditCatScreenState extends State<EditCatScreen> {
                                 newBreed: breedController.text,
                                 newDescription: descriptionController.text,
                                 newName: nameController.text,
-                                newImage: image);
+                                newImage: imageFile == null
+                                    ? oldImagefile
+                                    : imageFile);
 
                         Navigator.pop(context);
                       },
