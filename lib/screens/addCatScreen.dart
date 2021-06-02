@@ -1,4 +1,4 @@
-import 'package:cat_a_logue/constaants.dart';
+import 'package:cat_a_logue/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -6,8 +6,13 @@ import 'package:cat_a_logue/widgets/catImageContainer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cat_a_logue/widgets/customTextformField.dart';
 import 'package:cat_a_logue/widgets/customButton.dart';
+import 'package:cat_a_logue/models/catProfile.dart';
+import 'package:cat_a_logue/models/catProfileData.dart';
+import 'package:provider/provider.dart';
 
 class AddCatScreen extends StatefulWidget {
+  // final List<CatProfile> catProfileList;
+  // AddCatScreen({this.catProfileList});
   @override
   _AddCatScreenState createState() => _AddCatScreenState();
 }
@@ -20,6 +25,26 @@ class _AddCatScreenState extends State<AddCatScreen> {
   TextEditingController ageController = TextEditingController();
   TextEditingController breedController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('error'),
+            content: Text('Please add all field'),
+            actions: <Widget>[
+              // ignore: deprecated_member_use
+              new FlatButton(
+                child: new Text('ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
 
   Future getImage() async {
     final pickedFile = await picker.getImage(
@@ -91,10 +116,25 @@ class _AddCatScreenState extends State<AddCatScreen> {
                   height: 15.h,
                 ),
                 CustomButton(
-                  buttonColor: kPrimaryColor,
-                  buttonText: 'Add Cat',
-                  textColor: Colors.grey[200],
-                )
+                    buttonColor: kPrimaryColor,
+                    buttonText: 'Add Cat',
+                    textColor: Colors.grey[200],
+                    onPress: () {
+                      if (image == null) {
+                        _displayDialog(context);
+                      } else {
+                        final newCatProfile = CatProfile(
+                            catAge: ageController.text,
+                            catBreed: breedController.text,
+                            catDescription: descriptionController.text,
+                            catImage: image,
+                            catName: nameController.text);
+
+                        Provider.of<CatProfileData>(context, listen: false)
+                            .addCatProfile(newCatProfile);
+                        Navigator.pop(context);
+                      }
+                    })
               ],
             ),
           ),

@@ -34,17 +34,24 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        // child: Center(
+        //   // child: Image(
+        //   //   height: 300.r,
+        //   //   width: 300.r,
+        //   //   image: AssetImage('images/catAlogueLogo.png'),
+        //   // ),
+        // ),
         child: Stack(
           children: [
             Positioned(
               top: 200.h,
               bottom: 200.h,
-              right: 10.w,
-              left: 50.w,
+              right: 80.w,
+              left: 5.w,
               child: Image(
-                height: 400.h,
-                width: 400.w,
-                image: AssetImage('images/catlogocopy.png'),
+                height: 100.r,
+                width: 100.r,
+                image: AssetImage('images/catAlogueLogo.png'),
               ),
             ),
           ],
